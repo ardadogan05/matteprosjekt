@@ -1,0 +1,35 @@
+import numpy as np
+import matplotlib.pyplot as plt
+#RC-krest matte prosjekt
+
+#brukte en motstand på 33 kOhm, og en kondensator med 100micro F
+#Det er et 9v batteri men det går opp til 9.4 V elns
+
+measuredValues = [0.82, 1.92, 2.50, 3.08, 4.1, 4.54, 5.96, 6.23, 7.18, 8.18, 8.44, 8.81, 9]
+measuredTime = [2.86, 2.94, 3.28, 3.45, 4.11, 4.46, 5.74, 6.02, 7.41, 9.96, 10.72, 12.64, 14.80]
+#de målte verdiene over er 2.73 s for stor
+
+actualTime = []
+
+for time in measuredTime:
+    newTime = time - 2.76
+    actualTime.append(newTime)
+
+
+times = np.linspace(0,12.04,1000) # 14.80-2.76 = 12.04
+R = 33E3
+C = 100E-6
+
+def model(t,R,C):
+    return 9*(1-np.exp((-t)/(R*C)))
+
+fig, ax  = plt.subplots()
+
+ax.plot(actualTime, measuredValues, label = "Faktiske verdier")
+ax.plot(times, model(times,R,C), label = "teoretisk modell")
+ax.set_xlabel("Time(s)")
+ax.set_ylabel("Voltage(V)")
+ax.set_title("Spenning over kondensator, teoretisk vs målinger")
+ax.legend()
+
+plt.show()
